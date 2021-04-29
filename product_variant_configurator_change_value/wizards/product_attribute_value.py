@@ -14,4 +14,5 @@ class ProductAttributeValueWizard(models.TransientModel):
     # }
 
     product_attribute_value_id = fields.Many2one("product.attribute.value")
-    attribute_action = fields.Selection([("delete", "Delete"), ("add", "Add"), ("do_nothing", "Do Nothing")], default="do_nothing")
+    attribute_action = fields.Selection([("delete", "Delete"), ("replace", "Replace"), ("do_nothing", "Do Nothing")], default="do_nothing")
+    replaced_by = fields.Many2one("product.attribute.value")

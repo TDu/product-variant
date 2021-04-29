@@ -5,7 +5,7 @@
     "website": "https://github.com/OCA/product-variant",
     "license": "AGPL-3",
     "category": "Product Variant",
-    "depends": ["product_variant_configurator"],
+    "depends": ["product"],
     "data": ["views/product_views.xml", "wizards/product_variant_update_attribute.xml"],
     "installable": True,
 }

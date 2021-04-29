@@ -22,11 +22,12 @@
                     <!--     </tree> -->
                     <!--   </field> -->
                     <!-- </group> -->
-                    <group name="unit_price_group">
+                    <!-- <group name="unit_price_group"> -->
                       <field name="attributes_action_ids">
                         <tree editable="true">
                           <field name="attribute_action" />
                           <field name="product_attribute_value_id" />
+                          <field name="replaced_by" />
                           <!-- <field name="attribute_id" /> -->
                         </tree>
                       </field>
@@ -34,7 +35,7 @@
                         <!--     name="apply_value_change" -->
                         <!--     type="object" -->
                         <!-- >Apply</button> -->
-                    </group>
+                    <!-- </group> -->
                 </group>
                 <div class="text-warning">
                     <field name="warning_message" />

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+
+  <!-- <record id="action_change_variant_values" model="ir.actions.server"> -->
+  <!--   <field name="name">Open variant attribute wizard</field> -->
+  <!--   <field name="model_id" ref="product.model_product_product"/> -->
+  <!--   <field name="binding_model_id" ref="product.model_product_product"/> -->
+  <!--   <field name="binding_view_types">list</field> -->
+  <!--   <field name="state">code</field> -->
+  <!--   <field name="code"> -->
+  <!--     if records: -->
+  <!--     records.action_change_variant_attributes() -->
+  <!--   </field> -->
+  <!-- </record> -->
+
+</odoo>

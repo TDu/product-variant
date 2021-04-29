@@ -1,82 +1,54 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <record id="view_product_variant_update_attribute_wizard" model="ir.ui.view">
-        <field name="name">Product Variant Update Attribute</field>
-        <field name="model">product.variant.update.attribute.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Product Variant Change Attribute">
-                <!-- <field name="product_tmpl_id" invisible="1" /> -->
-                <field name="product_ids">
-                  <tree>
-                    <field name="default_code" />
-                    <field name="name" />
-                    <field name="product_template_attribute_value_ids" widget="many2many_tags" />
-                  </tree>
-                </field>
-                <group name="main">
-                    <!-- <group name="use_attribute_values"> -->
-                    <!--   <field name="product_attribute_value_ids"> -->
-                    <!--     <tree> -->
-                    <!--       <field name="name" /> -->
-                    <!--       <field name="attribute_id" /> -->
-                    <!--     </tree> -->
-                    <!--   </field> -->
-                    <!-- </group> -->
-                    <!-- <group name="unit_price_group"> -->
-                      <field name="attributes_action_ids">
-                        <tree editable="true">
-                          <field name="attribute_action" />
-                          <field name="product_attribute_value_id" />
-                          <field name="replaced_by" />
-                          <!-- <field name="attribute_id" /> -->
-                        </tree>
-                      </field>
-                        <!-- <button -->
-                        <!--     name="apply_value_change" -->
-                        <!--     type="object" -->
-                        <!-- >Apply</button> -->
-                    <!-- </group> -->
-                </group>
-                <div class="text-warning">
-                    <field name="warning_message" />
-                </div>
-                <!-- <field name="packaging_ids"> -->
-                <!--     <tree> -->
-                <!--         <field name="display_name" /> -->
-                <!--         <field name="qty" /> -->
-                <!--         <field -->
-                <!--             name="packaging_wizard_price" -->
-                <!--             string="Total Price" -->
-                <!--             class="font-weight-bold" -->
-                <!--         /> -->
-                <!--         <field -->
-                <!--             name="product_uom_id" -->
-                <!--             options="{'no_open': True, 'no_create': True}" -->
-                <!--         /> -->
-                <!--     </tree> -->
-                <!-- </field> -->
-                <footer>
-                    <button
-                        name="action_change_attributes"
-                        string="Save"
-                        type="object"
-                        class="btn-primary"
-                    />
-                    <button string="Cancel" class="btn-secondary" special="cancel" />
-                </footer>
-            </form>
-        </field>
-    </record>
 
-    <act_window id="action_variant_change_value"
-      name="Product Variant - Change attribute values assigned"
-      binding_model="product.product"
-      res_model="product.variant.update.attribute.wizard"
-      binding_views="list"
-      view_mode="form"
-      target="new"
-      context="{'default_res_ids': active_ids}"
-      />
+  <record id="view_product_variant_update_attribute_wizard" model="ir.ui.view">
+    <field name="name">Product Variant Update Attribute</field>
+    <field name="model">product.variant.update.attribute.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Product Variant Change Attribute">
+        <field name="product_ids">
+          <tree edit="false" create="false" delete="false" open="false">
+            <field name="default_code" />
+            <field name="name" />
+            <field name="product_template_attribute_value_ids" widget="many2many_tags" />
+          </tree>
+        </field>
+        <!-- <group name="main"> -->
+          <field name="attributes_action_ids">
+            <tree editable="true" create="false" delete="0" open="0">
+              <field name="attribute_action" />
+              <field name="product_attribute_value_id" />
+              <field name="replaced_by" attrs="{'readonly':[['attribute_action', '!=', 'replace' ]]}" />
+            </tree>
+          </field>
+          <!-- <label for="add_action" class="pull-left btn btn-success" /> -->
+          <!-- <field name="add_action" invisible="1" /> -->
+        <!-- </group> -->
+        <!-- <div class="text-warning"> -->
+        <!--   <field name="warning_message" /> -->
+        <!-- </div> -->
+        <footer>
+          <button
+            name="action_change_attributes"
+            string="Save"
+            type="object"
+            class="btn-primary"
+            />
+          <button string="Cancel" class="btn-secondary" special="cancel" />
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <act_window id="action_variant_change_value"
+    name="Product Variant - Change attribute values assigned"
+    binding_model="product.product"
+    res_model="product.variant.update.attribute.wizard"
+    binding_views="list"
+    view_mode="form"
+    target="new"
+    context="{'default_res_ids': active_ids}"
+    />
 
 
 </odoo>

@@ -41,14 +41,14 @@ class TestProductVariantChangeAttributeValue(common.SavepointCase):
         """Check if attribute value is assigned to the template."""
         template = product.product_tmpl_id
         attr = attr_value.attribute_id
-        tpl_attr_line = template.attribute_line_ids.filtered(
+        attribute_line = template.attribute_line_ids.filtered(
             lambda l: l.attribute_id == attr
         )
-        if not tpl_attr_line:
+        if not attribute_line:
             return False
         tpl_attr_value = self.env["product.template.attribute.value"].search(
             [
-                ("attribute_line_id", "=", tpl_attr_line.id),
+                ("attribute_line_id", "=", attribute_line.id),
                 ("product_attribute_value_id", "=", attr_value.id),
             ]
         )
@@ -67,21 +67,19 @@ class TestProductVariantChangeAttributeValue(common.SavepointCase):
         self.wizard_1.action_change_attributes()
         vals = self.variant_1.product_template_attribute_value_ids.mapped("product_attribute_value_id")
         self.assertFalse(self.steel in vals)
-        # Fix me
-        # self.assertFalse(self.check_template_attribute_value(self.variant_1, self.steel))
+        self.assertFalse(self.check_template_attribute_value(self.variant_1, self.steel))
 
     def test_change_attribure_value(self):
         self.wizard_1 = self.wizard.with_context(
             default_res_ids=self.variants
         ).create({})
-        self.change_action(self.steel, "replace", self.aluminium)
-        # self.change_action(self.white, "replace", self.pink)
+        # self.change_action(self.steel, "replace", self.aluminium)
+        self.change_action(self.white, "replace", self.pink)
         vals = self.variant_1.product_template_attribute_value_ids.mapped("product_attribute_value_id")
-        self.assertTrue(self.steel in vals)
-        self.assertFalse(self.aluminium in vals)
+        self.assertTrue(self.white in vals)
+        self.assertFalse(self.pink in vals)
         self.wizard_1.action_change_attributes()
         vals = self.variant_1.product_template_attribute_value_ids.mapped("product_attribute_value_id")
-        self.assertFalse(self.steel in vals)
-        self.assertTrue(self.aluminium in vals)
-        # Fix me
-        # self.assertFalse(self.check_template_attribute_value(self.variant_1, self.steel))
+        self.assertFalse(self.white in vals)
+        self.assertTrue(self.pink in vals)
+        self.assertFalse(self.check_template_attribute_value(self.variant_1, self.white))

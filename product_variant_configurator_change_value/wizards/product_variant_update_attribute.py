@@ -31,11 +31,24 @@ class ProductVariantUpdateAttributeWizard(models.TransientModel):
         for product in self.product_ids:
             self.update_variant_value(product)
 
+    def is_attribute_value_being_used(self, variant_id, attribute_value):
+        """Check if attribute value is still in used on any variant of a template."""
+        existing_variants = self.env["product.product"].search(
+            [
+                ("id", "!=", variant_id.id),
+                ("product_tmpl_id", "=", variant_id.product_tmpl_id.id),
+            ],
+        )
+        existing_attributes = existing_variants.mapped(
+            "product_template_attribute_value_ids.product_attribute_value_id"
+        )
+        return attribute_value in existing_attributes
+
     def update_variant_value(self, product):
         for value in self.attributes_action_ids:
             action = value.attribute_action
             if action == "do_nothing":
-                return
+                continue
             pav = value.product_attribute_value_id
             # replacing with
             attr_value = value.replaced_by
@@ -47,10 +60,10 @@ class ProductVariantUpdateAttributeWizard(models.TransientModel):
             TplAttrValue = self.env["product.template.attribute.value"]
             template = product_id.product_tmpl_id
             print("{} -> {} by {}".format(action, pav, attr_value))
+            attr = attr_value.attribute_id
             if attr_value:
                 # Find the corresponding attribute line on the template
                 # or create it if none is found
-                attr = attr_value.attribute_id
                 tpl_attr_line = template.attribute_line_ids.filtered(
                     lambda l: l.attribute_id == attr
                 )
@@ -90,3 +103,21 @@ class ProductVariantUpdateAttributeWizard(models.TransientModel):
             if action == "replace":
                 ptavs |= tpl_attr_value
             product_id.product_template_attribute_value_ids = ptavs
+
+            if not self.is_attribute_value_being_used(product_id, pav):
+                tpl_attr_line = template.attribute_line_ids.filtered(
+                    lambda l: l.attribute_id == pav.attribute_id
+                )
+                print("REMOVE VALUE FROM TEMPLATE")
+
+                tpl_attr_line.with_context(
+                    update_product_template_attribute_values=False
+                ).write({"value_ids": [(3, pav.id)]})
+                tpl_attr_value = TplAttrValue.search(
+                    [
+                        ("attribute_line_id", "=", tpl_attr_line.id),
+                        ("product_attribute_value_id", "=", pav.id),
+                    ]
+                )
+                if tpl_attr_value:
+                    tpl_attr_value.unlink()

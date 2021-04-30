@@ -13,7 +13,6 @@
             <field name="product_template_attribute_value_ids" widget="many2many_tags" />
           </tree>
         </field>
-        <!-- <group name="main"> -->
           <field name="attributes_action_ids">
             <tree editable="true" create="false" delete="0" open="0">
               <field name="attribute_action" />
@@ -21,12 +20,6 @@
               <field name="replaced_by" attrs="{'readonly':[['attribute_action', '!=', 'replace' ]]}" />
             </tree>
           </field>
-          <!-- <label for="add_action" class="pull-left btn btn-success" /> -->
-          <!-- <field name="add_action" invisible="1" /> -->
-        <!-- </group> -->
-        <!-- <div class="text-warning"> -->
-        <!--   <field name="warning_message" /> -->
-        <!-- </div> -->
         <footer>
           <button
             name="action_change_attributes"

@@ -22,12 +22,3 @@ class ProductAttributeValueWizard(models.TransientModel):
         "product.attribute.value",
         string="Replace by"
     )
-    # replaced_by = fields.Many2one("product.attribute.value", compute="_compute_replaced_by", readonly=False)
-
-    # @api.depends("attribute_action")
-    # def _compute_replaced_by(self):
-    #     for rec in self:
-    #         if rec.attribute_action != "replace":
-    #             rec.replaced_by = False
-    #         else:
-    #             rec.replaced_by = rec.replaced_by

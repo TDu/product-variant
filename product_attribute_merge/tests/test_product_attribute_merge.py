@@ -130,24 +130,70 @@ class TestProductAttributeMerge(SavepointCase):
         # Fix me there is 4 actions I am not sure why ?
         # actions = wizard.attribute_values_merge_action_ids.mapped("attribute_value_action")
         wizard.action_merge()
-
-
-
-        
         # Not sure how to call the action_merge method ?
         # with Form(wizard) as form: 
         #     form.into_product_attribute_id = colour
 
+    def _get_value_related_variant(self, value):
+        return value.pav_attribute_line_ids.product_template_value_ids.filtered(
+            lambda ptv: ptv.product_attribute_value_id == value
+        ).ptav_product_variant_ids
 
-    def test_move_value(self):
+    def test_move_value_attribute_not_used_on_product(self):
         # Has White, Black
         color= self.env.ref("product.product_attribute_2")
+        # Has Black, Pink, Orange
         colour = self.env.ref("product_attribute_merge.attribute_colour")
-        # value_to_move = self.env.ref("product_attribute_merge.attribute_value_pink")
-        # white
+        # Move White to colour
         value_to_move = self.env.ref("product.product_attribute_value_3")
+        related_variant_before = self._get_value_related_variant(value_to_move)
         wizard = self._get_wizard(colour)
         wizard._move_attribute_value(value_to_move, colour)
+        self.assertTrue(value_to_move not in color.value_ids)
+        self.assertTrue(value_to_move in colour.value_ids)
+        # TODO check same products have the attribute
+        related_variant_after = self._get_value_related_variant(value_to_move)
+        wizard = self._get_wizard(colour)
+        self.assertEqual(related_variant_before, related_variant_after)
+
+    def test_move_value_attribute_used_on_product(self):
+        product_4 =  self.env.ref("product.product_product_4")
+        # Has White, Black
+        color= self.env.ref("product.product_attribute_2")
+        # Has Black, Pink, Orange
+        colour = self.env.ref("product_attribute_merge.attribute_colour")
+        pink = self.env.ref("product_attribute_merge.attribute_value_pink")
+        # Add Pink to the variant we will move White
+        ptal = self.env["product.template.attribute.line"].create(
+            {
+                "product_tmpl_id": product_4.product_tmpl_id.id,
+                "attribute_id": colour.id,
+                "value_ids": [(6, 0, pink.ids)]
+
+            }
+        )
+        # product_4
+
+        # Move White to colour
+        value_to_move = self.env.ref("product.product_attribute_value_3")
+        related_variant_before = self._get_value_related_variant(value_to_move)
+        wizard = self._get_wizard(colour)
+        wizard._move_attribute_value(value_to_move, colour)
+        self.assertTrue(value_to_move not in color.value_ids)
+        self.assertTrue(value_to_move in colour.value_ids)
+        # TODO check same products have the attribute
+        related_variant_after = self._get_value_related_variant(value_to_move)
+        wizard = self._get_wizard(colour)
+        self.assertEqual(related_variant_before, related_variant_after)
+
+    def test_delete_value_unused(self):
+        color= self.env.ref("product.product_attribute_2")
+        colour = self.env.ref("product_attribute_merge.attribute_colour")
+        value_to_delete = self.env.ref("product_attribute_merge.attribute_value_orange")
+        self.assertTrue(value_to_delete in colour.value_ids)
+        wizard = self._get_wizard(colour)
+        wizard._delete_attribute_value(value_to_delete)
+        self.assertTrue(value_to_delete not in colour.value_ids)
 
 
 

@@ -5,11 +5,11 @@
             <field name="name">Colour</field>
             <field name="sequence">20</field>
         </record>
-        <record id="attribute_value_white" model="product.attribute.value">
-            <field name="name">White</field>
-            <field name="attribute_id" ref="attribute_colour"/>
-            <field name="sequence">1</field>
-        </record>
+        <!-- <record id="attribute_value_white" model="product.attribute.value"> -->
+        <!--     <field name="name">White</field> -->
+        <!--     <field name="attribute_id" ref="attribute_colour"/> -->
+        <!--     <field name="sequence">1</field> -->
+        <!-- </record> -->
         <record id="attribute_value_black" model="product.attribute.value">
             <field name="name">Black</field>
             <field name="attribute_id" ref="attribute_colour"/>
